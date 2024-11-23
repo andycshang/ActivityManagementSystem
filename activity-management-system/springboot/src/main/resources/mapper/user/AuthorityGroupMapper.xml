@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.activity.mapper.user.AuthorityGroupMapper">
+    <resultMap id="AuthorityGroupMap" type="com.activity.entity.user.AuthorityGroup" >
+        <id column="authority_group_id" property="id" jdbcType="INTEGER" />
+        <result column="authority_group_name" property="name" jdbcType="VARCHAR" />
+        <result column="permission_level" property="permissionLevel" jdbcType="INTEGER" />
+    </resultMap>
+</mapper>

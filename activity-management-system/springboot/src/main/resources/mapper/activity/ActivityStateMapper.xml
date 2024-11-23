@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.activity.mapper.activity.ActivityStateMapper">
+    <resultMap id="ActivityStateMap" type="com.activity.entity.activity.ActivityState" >
+        <id column="activity_state_id" property="id" jdbcType="INTEGER" />
+        <result column="activity_state_name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+</mapper>

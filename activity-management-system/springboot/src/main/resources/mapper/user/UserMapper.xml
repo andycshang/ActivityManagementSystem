@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.activity.mapper.user.UserMapper">
+    <resultMap id="UserMap" type="com.activity.entity.user.User" >
+        <id column="user_id" property="id" jdbcType="INTEGER" />
+        <result column="user_name" property="name" jdbcType="VARCHAR" />
+        <!-- 联合其他resultMap的字段 -->
+        <association property="authorityGroup"
+                     resultMap="com.activity.mapper.user.AuthorityGroupMapper.AuthorityGroupMap"/>
+        <association property="account"
+                     resultMap="com.activity.mapper.user.AccountMapper.AccountMap"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="user_id" keyProperty="id">
+        INSERT INTO user(
+            user_name, user_authority_group_id,
+            user_account_id
+        )
+        values(
+            #{user.name}, #{user.authorityGroup.id},
+            #{user.account.id}
+        );
+    </insert>
+    <update id="updateNameById">
+        UPDATE user
+        SET user_name = #{newName}
+        WHERE user_id = #{userId};
+    </update>
+</mapper>

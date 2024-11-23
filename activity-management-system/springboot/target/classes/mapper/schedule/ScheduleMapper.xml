@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.activity.mapper.schedule.ScheduleMapper">
+    <resultMap id="ScheduleMap" type="com.activity.entity.schedule.Schedule" >
+        <id column="schedule_id" property="id" jdbcType="INTEGER" />
+        <result column="schedule_title" property="title" jdbcType="VARCHAR" />
+        <association property="info"
+                     resultMap="com.activity.mapper.event.EventInfoMapper.EventInfoMap"/>
+        <association property="activity"
+                     resultMap="com.activity.mapper.activity.ActivityMapper.ActivityMap"/>
+    </resultMap>
+
+    <insert id="insertWithInfo" useGeneratedKeys="true" keyProperty="eventInfo.id">
+        <!-- 插入 event_info -->
+        <selectKey keyProperty="eventInfo.id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO event_info(
+            start_time, end_time,
+            place, `desc`
+        )
+        values(
+            #{schedule.info.startTime}, #{eventInfo.endTime},
+            #{eventInfo.place}, #{eventInfo.description}
+        );
+        <!-- 插入 schedule -->
+        INSERT INTO schedule(
+            schedule_title,
+            schedule_info_id, schedule_acticity_id
+        )
+        values(
+            #{schedule.title},
+            #{eventInfo.id}, <!-- 必须用 eventInfo 对象获取到的键值，此时schedule中还没有键值 -->
+            #{schedule.activity.id}
+        );
+    </insert>
+
+    <update id="updateWithInfo">
+        <!-- 更新 schedule -->
+        UPDATE schedule
+        <set>
+        <if test="title != null">
+            title = #{schedule.title}
+        </if>
+        </set>
+        WHERE schedule_id = #{schedule.id};
+        <!-- 更新 event_info -->
+        UPDATE event_info
+        <set>
+            <if test="startTime != null">
+                start_time = #{eventInfo.startTime}
+            </if>
+            <if test="endTime != null">
+                end_time = #{eventInfo.endTime}
+            </if>
+            <if test="place != null">
+                place = #{eventInfo.place}
+            </if>
+            <if test="description != null">
+                `desc` = #{eventInfo.description}
+            </if>
+        </set>
+        WHERE event_info_id = #{schedule.info.id};
+    </update>
+
+</mapper>
